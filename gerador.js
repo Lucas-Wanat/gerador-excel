@@ -48,7 +48,7 @@ module.exports = {
                 const sheet = workbook.sheet("Sheet1");
 
                 nomeValor.forEach((nome, index) => {
-                    sheet.row(1).cell(index + 1).value(nome).style("fill", { bold: true, horizontalAlignment: "center", type: "solid", color: "FFF000" });
+                    sheet.row(1).cell(index + 1).value(nome).style("fill", { type: "solid", color: "76daf3" }).style({ bold: true, horizontalAlignment: "center" })
                 })
 
                 let linha = 1;
@@ -56,7 +56,11 @@ module.exports = {
                     let valores = Object.values(row);
                     linha = linha + 1;
                     valores.forEach((valor, i) => {
-                        sheet.row(linha).cell(i + 1).value(valor);
+                        if(linha % 2 == 0) {
+                            sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "e4f3f9" });
+                        } else {
+                            sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "ffffff" });
+                        }
                     })
                 })
 
