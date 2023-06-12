@@ -1,7 +1,7 @@
 const XlsxPopulate = require('xlsx-populate');
 
 module.exports = {
-    gerarXlsx(req, res) {
+    async gerarXlsx(req, res) {
         let rows = [
             {
                 nome_fantasia: "Empresa 1",
@@ -43,15 +43,15 @@ module.exports = {
 
         let nomeValor = Object.keys(rows[0]);
 
-        XlsxPopulate.fromBlankAsync()
+        await XlsxPopulate.fromBlankAsync()
             .then(workbook => {
                 const sheet = workbook.sheet("Sheet1");
 
                 nomeValor.forEach((nome, index) => {
-                    sheet.row(1).cell(index + 1).value(nome)
+                    sheet.row(1).cell(index + 1).value(nome).style("fill", { bold: true, horizontalAlignment: "center", type: "solid", color: "00FF00" });
                 })
 
-                let linha = 0;
+                let linha = 1;
                 rows.forEach((row) => {
                     let valores = Object.values(row);
                     linha = linha + 1;
@@ -63,7 +63,7 @@ module.exports = {
                 return workbook.toFileAsync("./output.xlsx");
             });
         
-        res.download('output.xlsx');
+        await res.download('output.xlsx');
     }
     
 }
