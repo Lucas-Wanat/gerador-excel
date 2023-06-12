@@ -65,5 +65,4 @@ module.exports = {
         
         await res.download('output.xlsx');
     }
-    
 }
