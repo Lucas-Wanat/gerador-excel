@@ -70,6 +70,10 @@ module.exports = {
                         } else {
                             sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "ffffff" })
                         }
+
+                        if(typeof valor == "number") {
+                            sheet.row(linha).cell(i + 1).style({ horizontalAlignment: "right" });
+                        }
                     })
                 })
 
