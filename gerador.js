@@ -11,6 +11,7 @@ module.exports = {
                 numero: "123",
                 bairro: "Bairro 1",
                 cidade: "Cidade 1",
+                valor: 1000.00
             },
             {
                 nome_fantasia: "Empresa 2",
@@ -20,6 +21,7 @@ module.exports = {
                 numero: "321",
                 bairro: "Bairro 2",
                 cidade: "Cidade 2",
+                valor: 2000.00
             },
             {
                 nome_fantasia: "Empresa 3",
@@ -29,6 +31,7 @@ module.exports = {
                 numero: "456",
                 bairro: "Bairro 3",
                 cidade: "Cidade 3",
+                valor: 3000.00
             },
             {
                 nome_fantasia: "Empresa 4",
@@ -38,17 +41,23 @@ module.exports = {
                 numero: "654",
                 bairro: "Bairro 4",
                 cidade: "Cidade 4",
+                valor: 4000.00
             }
         ];
 
         let nomeValor = Object.keys(rows[0]);
+
+        nomeValor = nomeValor.map((nome) => {
+            return nome.replace(/_/g, " ").toUpperCase();
+        })
 
         await XlsxPopulate.fromBlankAsync()
             .then(workbook => {
                 const sheet = workbook.sheet("Sheet1");
 
                 nomeValor.forEach((nome, index) => {
-                    sheet.row(1).cell(index + 1).value(nome).style("fill", { type: "solid", color: "76daf3" }).style({ bold: true, horizontalAlignment: "center" })
+                    sheet.row(1).cell(index + 1).value(nome).style("fill", { type: "solid", color: "76daf3" }).style({ bold: true, horizontalAlignment: "center" });
+                    sheet.column(index + 1).width(18);
                 })
 
                 let linha = 1;
@@ -57,9 +66,9 @@ module.exports = {
                     linha = linha + 1;
                     valores.forEach((valor, i) => {
                         if(linha % 2 == 0) {
-                            sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "e4f3f9" });
+                            sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "e4f3f9" })
                         } else {
-                            sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "ffffff" });
+                            sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "ffffff" })
                         }
                     })
                 })
