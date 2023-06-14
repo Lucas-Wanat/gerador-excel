@@ -42,7 +42,7 @@ module.exports = {
                 bairro: "Bairro 4",
                 cidade: "Cidade 4",
                 valor: 4000.00
-            }
+            },
         ];
 
         let nomeValor = Object.keys(rows[0]);
@@ -68,7 +68,7 @@ module.exports = {
                     larguraMax = larguras.reduce((prev, current) => { 
                         return prev > current ? prev : current; 
                     });
-                    
+
                     larguraMax = larguraMax > nome.length ? larguraMax : nome.length;
 
                     sheet.column(index + 1).width(larguraMax + 5);
@@ -76,14 +76,19 @@ module.exports = {
 
                 let linha = 1;
                 let totalValor = 0;
+                
                 rows.forEach((row) => {
                     let valores = Object.values(row);
                     linha = linha + 1;
                     valores.forEach((valor, i) => {
+                        sheet.row(linha).cell(i + 1).value(valor)
+
                         if(linha % 2 == 0) {
-                            sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "e4f3f9" })
+                            sheet.row(linha).cell(i + 1).style("fill", { type: "solid", color: "ffffff" });
+                            sheet.row(linha + 1).cell(i + 1).style("fill", { type: "solid", color: "e4f3f9" }); // estilo da linha seguinte
                         } else {
-                            sheet.row(linha).cell(i + 1).value(valor).style("fill", { type: "solid", color: "ffffff" })
+                            sheet.row(linha).cell(i + 1).style("fill", { type: "solid", color: "e4f3f9" });
+                            sheet.row(linha + 1).cell(i + 1).style("fill", { type: "solid", color: "ffffff" }); // estilo da linha seguinte
                         }
 
                         if(typeof valor == "number") {
@@ -91,21 +96,16 @@ module.exports = {
                             totalValor += valor;
 
                             if(rows.length == linha - 1) {
-                                if(linha % 2 == 0) {
-                                    sheet.row(linha + 1).cell(i).value("TOTAL:").style({ bold: true, horizontalAlignment: "left" });
-                                    sheet.row(linha + 1).cell(i + 1).value(totalValor).style({ bold: true, horizontalAlignment: "right" });
-                                } else {
-                                    sheet.row(linha + 1).cell(i).value("TOTAL:").style({ bold: true, horizontalAlignment: "left" });
-                                    sheet.row(linha + 1).cell(i + 1).value(totalValor).style({ bold: true, horizontalAlignment: "right" });
-                                }
+                                sheet.row(linha + 1).cell(i).value("TOTAL:").style({ bold: true, horizontalAlignment: "left" });
+                                sheet.row(linha + 1).cell(i + 1).value(totalValor).style({ bold: true, horizontalAlignment: "right" });
                             }
                         }
                     })
                 })
-
+            
                 return workbook.toFileAsync("./output.xlsx");
             });
-        
+            
         await res.download('output.xlsx');
     }
 }
