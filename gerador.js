@@ -11,7 +11,6 @@ module.exports = {
                 numero: "123",
                 bairro: "Bairro 1",
                 cidade: "Cidade 1",
-                valor: 1000.00
             },
             {
                 nome_fantasia: "Empresa 2",
@@ -21,7 +20,6 @@ module.exports = {
                 numero: "321",
                 bairro: "Bairro 2",
                 cidade: "Cidade 2",
-                valor: 2000.00
             },
             {
                 nome_fantasia: "Empresa 3",
@@ -31,7 +29,6 @@ module.exports = {
                 numero: "456",
                 bairro: "Bairro 3",
                 cidade: "Cidade 3",
-                valor: 3000.00
             },
             {
                 nome_fantasia: "Empresa 4",
@@ -41,7 +38,6 @@ module.exports = {
                 numero: "654",
                 bairro: "Bairro 4",
                 cidade: "Cidade 4",
-                valor: 4000.00
             },
         ];
 
@@ -75,7 +71,6 @@ module.exports = {
                 })
 
                 let linha = 1;
-                let totalValor = 0;
                 
                 rows.forEach((row) => {
                     let valores = Object.values(row);
@@ -85,20 +80,8 @@ module.exports = {
 
                         if(linha % 2 == 0) {
                             sheet.row(linha).cell(i + 1).style("fill", { type: "solid", color: "ffffff" });
-                            sheet.row(linha + 1).cell(i + 1).style("fill", { type: "solid", color: "e4f3f9" }); // estilo da linha seguinte
                         } else {
                             sheet.row(linha).cell(i + 1).style("fill", { type: "solid", color: "e4f3f9" });
-                            sheet.row(linha + 1).cell(i + 1).style("fill", { type: "solid", color: "ffffff" }); // estilo da linha seguinte
-                        }
-
-                        if(typeof valor == "number") {
-                            sheet.row(linha).cell(i + 1).style({ horizontalAlignment: "right" });
-                            totalValor += valor;
-
-                            if(rows.length == linha - 1) {
-                                sheet.row(linha + 1).cell(i).value("TOTAL:").style({ bold: true, horizontalAlignment: "left" });
-                                sheet.row(linha + 1).cell(i + 1).value(totalValor).style({ bold: true, horizontalAlignment: "right" });
-                            }
                         }
                     })
                 })
