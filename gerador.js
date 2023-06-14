@@ -57,10 +57,25 @@ module.exports = {
 
                 nomeValor.forEach((nome, index) => {
                     sheet.row(1).cell(index + 1).value(nome).style("fill", { type: "solid", color: "76daf3" }).style({ bold: true, horizontalAlignment: "center" });
-                    sheet.column(index + 1).width(18);
+                    
+                    let larguraMax = 0;
+                    let larguras = [];
+
+                    rows.map((row) => {
+                        larguras.push(row[nome.replace(/ /g, "_").toLowerCase()].length);
+                    })
+
+                    larguraMax = larguras.reduce((prev, current) => { 
+                        return prev > current ? prev : current; 
+                    });
+                    
+                    larguraMax = larguraMax > nome.length ? larguraMax : nome.length;
+
+                    sheet.column(index + 1).width(larguraMax + 5);
                 })
 
                 let linha = 1;
+                let totalValor = 0;
                 rows.forEach((row) => {
                     let valores = Object.values(row);
                     linha = linha + 1;
@@ -73,6 +88,17 @@ module.exports = {
 
                         if(typeof valor == "number") {
                             sheet.row(linha).cell(i + 1).style({ horizontalAlignment: "right" });
+                            totalValor += valor;
+
+                            if(rows.length == linha - 1) {
+                                if(linha % 2 == 0) {
+                                    sheet.row(linha + 1).cell(i).value("TOTAL:").style({ bold: true, horizontalAlignment: "left" });
+                                    sheet.row(linha + 1).cell(i + 1).value(totalValor).style({ bold: true, horizontalAlignment: "right" });
+                                } else {
+                                    sheet.row(linha + 1).cell(i).value("TOTAL:").style({ bold: true, horizontalAlignment: "left" });
+                                    sheet.row(linha + 1).cell(i + 1).value(totalValor).style({ bold: true, horizontalAlignment: "right" });
+                                }
+                            }
                         }
                     })
                 })
