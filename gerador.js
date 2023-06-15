@@ -59,7 +59,7 @@ module.exports = {
 
         rows.forEach((row) => {
             Object.keys(row).forEach((key) => {
-                if(key == "dinheiro" || key == "quantidade") {
+                if(typeof row[key] == "number") {
                     if(totais[key]) {
                         totais[key] = totais[key] + row[key];
                     } else {
