@@ -1,4 +1,5 @@
 const XlsxPopulate = require('xlsx-populate');
+const fs = require('fs');
 
 module.exports = {
     async gerarXlsx(req, res) {
@@ -70,7 +71,7 @@ module.exports = {
         });
 
         await XlsxPopulate.fromBlankAsync()
-            .then(workbook => {
+            .then(async (workbook) => {
                 const sheet = workbook.sheet("Sheet1");
 
                 nomeValor.forEach((nome, index) => {
@@ -102,8 +103,10 @@ module.exports = {
 
                         if(linha % 2 == 0) {
                             sheet.row(linha).cell(i + 1).style("fill", { type: "solid", color: "ffffff" });
+                            sheet.row(linha + 1).cell(i + 1).style("fill", { type: "solid", color: "e4f3f9" });
                         } else {
                             sheet.row(linha).cell(i + 1).style("fill", { type: "solid", color: "e4f3f9" });
+                            sheet.row(linha + 1).cell(i + 1).style("fill", { type: "solid", color: "ffffff" });
                         }
 
                         if(typeof valor == "number") {
@@ -117,10 +120,18 @@ module.exports = {
                         }
                     })
                 })
-            
-                return workbook.toFileAsync("./output.xlsx");
+
+                return await workbook.outputAsync();
+            })
+            .then((buffer) => {
+                let fileName = `output.xlsx`;
+                
+                res.attachment(fileName);
+
+                res.send(buffer);
+            })
+            .catch((err) => {
+                console.log(err);
             });
-            
-        await res.download('output.xlsx');
     }
 }
