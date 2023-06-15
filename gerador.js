@@ -11,6 +11,8 @@ module.exports = {
                 numero: "123",
                 bairro: "Bairro 1",
                 cidade: "Cidade 1",
+                dinheiro: 123.45,
+                quantidade: 350,
             },
             {
                 nome_fantasia: "Empresa 2",
@@ -20,6 +22,8 @@ module.exports = {
                 numero: "321",
                 bairro: "Bairro 2",
                 cidade: "Cidade 2",
+                dinheiro: 123.45,
+                quantidade: 90,
             },
             {
                 nome_fantasia: "Empresa 3",
@@ -29,6 +33,8 @@ module.exports = {
                 numero: "456",
                 bairro: "Bairro 3",
                 cidade: "Cidade 3",
+                dinheiro: 123.45,
+                quantidade: 32,
             },
             {
                 nome_fantasia: "Empresa 4",
@@ -38,6 +44,8 @@ module.exports = {
                 numero: "654",
                 bairro: "Bairro 4",
                 cidade: "Cidade 4",
+                dinheiro: 123.45,
+                quantidade: 12,
             },
         ];
 
@@ -46,6 +54,20 @@ module.exports = {
         nomeValor = nomeValor.map((nome) => {
             return nome.replace(/_/g, " ").toUpperCase();
         })
+
+        totais = {};
+
+        rows.forEach((row) => {
+            Object.keys(row).forEach((key) => {
+                if(key == "dinheiro" || key == "quantidade") {
+                    if(totais[key]) {
+                        totais[key] = totais[key] + row[key];
+                    } else {
+                        totais[key] = row[key];
+                    }
+                }
+            })
+        });
 
         await XlsxPopulate.fromBlankAsync()
             .then(workbook => {
@@ -82,6 +104,16 @@ module.exports = {
                             sheet.row(linha).cell(i + 1).style("fill", { type: "solid", color: "ffffff" });
                         } else {
                             sheet.row(linha).cell(i + 1).style("fill", { type: "solid", color: "e4f3f9" });
+                        }
+
+                        if(typeof valor == "number") {
+                            if(rows.length == linha - 1) {
+                                sheet.row(linha + 1).cell(1).value("Total").style({ bold: true, horizontalAlignment: "left" });
+
+                                if(Object.keys(totais).includes(Object.keys(row)[i])) {
+                                    sheet.row(linha + 1).cell(i + 1).value(totais[Object.keys(row)[i]]).style({ bold: true, horizontalAlignment: "right" });
+                                }
+                            }
                         }
                     })
                 })
