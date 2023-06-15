@@ -1,5 +1,4 @@
 const XlsxPopulate = require('xlsx-populate');
-const fs = require('fs');
 
 module.exports = {
     async gerarXlsx(req, res) {
