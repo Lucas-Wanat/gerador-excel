@@ -123,12 +123,12 @@ module.exports = {
 
                 return await workbook.outputAsync();
             })
-            .then((buffer) => {
+            .then((data) => {
                 let fileName = `output.xlsx`;
-                
+
                 res.attachment(fileName);
 
-                res.send(buffer);
+                res.send(data);
             })
             .catch((err) => {
                 console.log(err);
